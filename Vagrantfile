@@ -22,6 +22,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision :docker
   
   config.vm.provision :docker_compose,
-    yml: "/home/vagrant/shared/docker/docker-compose.yml",
+    yml: "/home/vagrant/shared/docker-compose.yml",
     run: "always"
 end
