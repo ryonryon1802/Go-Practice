@@ -10,10 +10,10 @@ import (
 // 	c.String(200, "Hello,World!")
 // }
 
-func GetUser(c *gin.Context) {
-	db := migrations.CreateConnection()
+// func GetUser(c *gin.Context) {
+// 	db := migrations.CreateConnection()
 
-	users := []models.User{}
-	db.Find(&users)
-	c.JSON(200, users)
-}
+// 	users := []models.User{}
+// 	db.Find(&users)
+// 	c.JSON(200, users)
+// }

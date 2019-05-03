@@ -12,3 +12,10 @@ type User struct {
 	UpdatedAt time.Time
 }
 
+func (u *User) getUser(c *gin.Context) {
+	db := migrations.CreateConnection()
+
+	user := new(User)
+	db.Find(user)
+	c.JSON(200, user)
+}
