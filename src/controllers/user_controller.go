@@ -2,18 +2,16 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"../models"
-	"../migrations"
+	"github.com/ryonryon/Go-Practice/src/models"
 )
 
 // func GetHello(c *gin.Context) {
 // 	c.String(200, "Hello,World!")
 // }
 
-func GetUser(c *gin.Context) {
-	db := migrations.CreateConnection()
+func GetUserController(c *gin.Context) {
+	user := models.User{}
+	users := user.GetUser()
 
-	users := []models.User{}
-	db.Find(&users)
 	c.JSON(200, users)
 }
