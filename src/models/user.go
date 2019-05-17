@@ -1,21 +1,33 @@
 package models
 
 import (
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/jinzhu/gorm"
+	"github.com/ryonryon/Go-Practice/src/interfaces/handler"
 	"time"
 )
 
-type User struct {
-	ID   uint   `json:"id"`
-	Name string `json:"name"`
+// gorm.Modelの定義
+type Model struct {
+	ID        uint `gorm:"primary_key"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	// DeletedAt *time.Time
 }
 
-func (u *User) getUser(c *gin.Context) {
-	db := migrations.CreateConnection()
+type User struct {
+	gorm.Model
+	Name string `json:"name"`
+}
 
-	user := new(User)
+//func InitializeUser(db *gorm.DB) {
+//	db.AutoMigrate(User{})
+//}
+
+func (u *User) GetUser() *[]User {
+	db := handler.CreateConnection()
+
+	user := &[]User{}
 	db.Find(user)
-	c.JSON(200, user)
+
+	return user
 }
