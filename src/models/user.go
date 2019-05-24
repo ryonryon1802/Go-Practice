@@ -23,10 +23,17 @@ type User struct {
 //	db.AutoMigrate(User{})
 //}
 
-func (u *User) GetUser() *[]User { // *[]Userはポインタ変数？
+func (u *User) GetUser() *[]User {
 	db := handler.CreateConnection()
 	user := &[]User{}
 	db.Find(user)
+	return user
+}
+
+func (u *User) GetOneUser(id string) *[]User {
+	db := handler.CreateConnection()
+	user := &[]User{}
+	db.Where("id = ?", id).Find(user)
 	return user
 }
 
