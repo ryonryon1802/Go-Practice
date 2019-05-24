@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/ryonryon/Go-Practice/src/models"
-	"reflect"
+	"log"
+	"net/http"
 )
 
 // func GetHello(c *gin.Context) {
@@ -14,23 +14,17 @@ import (
 func GetUserController(c *gin.Context) {
 	user := models.User{}
 	users := user.GetUser()
-
-	// debug
-	fmt.Printf("Controller: %p\n", users)
-	fmt.Printf("Controller: %v\n", users)
-	fmt.Printf("Controller: %v\n", *users)
-	fmt.Println(reflect.TypeOf(users))
-
-	c.JSON(200, users)
+	c.JSON(http.StatusOK, users)
 }
 
 func AddUserController(c *gin.Context) {
 	user := new(models.User)
-
 	err := c.Bind(&user)
-	if err != nil {
-		fmt.Println(err)
-	}
 
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": err})
+		log.Print(err)
+		return
+	}
 	user.AddUser(user)
 }

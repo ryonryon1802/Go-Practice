@@ -1,10 +1,8 @@
 package models
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/ryonryon/Go-Practice/src/interfaces/handler"
-	"reflect"
 	"time"
 )
 
@@ -27,23 +25,13 @@ type User struct {
 
 func (u *User) GetUser() *[]User { // *[]Userはポインタ変数？
 	db := handler.CreateConnection()
-
 	user := &[]User{}
-
-	// debug
-	fmt.Printf("Model: %p\n", user)
-	fmt.Printf("Model: %v\n", user)
-	fmt.Printf("Model: %v\n", *user)
-	fmt.Println(reflect.TypeOf(user))
-
 	db.Find(user)
-
 	return user
 }
 
 func (u *User) AddUser(user *User) {
 	db := handler.CreateConnection()
-
 	db.NewRecord(&user)
 	db.Create(&user)
 }
