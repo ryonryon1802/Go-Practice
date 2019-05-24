@@ -23,11 +23,15 @@ type User struct {
 //	db.AutoMigrate(User{})
 //}
 
-func (u *User) GetUser() *[]User {
+func (u *User) GetUser() *[]User { // *[]Userはポインタ変数？
 	db := handler.CreateConnection()
-
 	user := &[]User{}
 	db.Find(user)
-
 	return user
+}
+
+func (u *User) AddUser(user *User) {
+	db := handler.CreateConnection()
+	db.NewRecord(&user)
+	db.Create(&user)
 }
