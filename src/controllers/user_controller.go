@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/ryonryon/Go-Practice/src/models"
 	"log"
@@ -20,7 +21,12 @@ func GetUserController(c *gin.Context) {
 func GetOneUserController(c *gin.Context) {
 	user := models.User{}
 	id := c.Param("id")
-	users := user.GetOneUser(id)
+	users, err := user.GetOneUser(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": err})
+		log.Print(err)
+		return
+	}
 	c.JSON(http.StatusOK, users)
 }
 
