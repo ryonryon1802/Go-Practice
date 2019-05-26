@@ -32,9 +32,8 @@ func GetOneUserController(c *gin.Context) {
 func AddUserController(c *gin.Context) {
 	user := new(models.User)
 	err := c.Bind(&user)
-
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": err})
+		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
 		log.Print(err)
 		return
 	}
