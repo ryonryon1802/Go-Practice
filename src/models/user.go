@@ -35,10 +35,11 @@ func (u *User) GetOneUser(id string) (*[]User, error) {
 	db := handler.CreateConnection()
 	user := &[]User{}
 	db.Where("id = ?", id).Find(user)
+	fmt.Printf("%v\n", *user)
 	if id == "" {
 		return nil, fmt.Errorf("parameter cannot find")
 	}
-	if *user == nil {
+	if cap(*user) == 0 {
 		return nil, fmt.Errorf("cannot find id: %s", id)
 	}
 	return user, nil
