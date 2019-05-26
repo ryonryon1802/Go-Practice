@@ -11,16 +11,16 @@ import (
 // 	c.String(200, "Hello,World!")
 // }
 
-func GetUserController(c *gin.Context) {
+func IndexUserController(c *gin.Context) {
 	user := models.User{}
-	users := user.GetUser()
+	users := user.IndexUser()
 	c.JSON(http.StatusOK, users)
 }
 
-func GetOneUserController(c *gin.Context) {
+func IndexOneUserController(c *gin.Context) {
 	user := models.User{}
 	id := c.Param("id")
-	users, err := user.GetOneUser(id)
+	users, err := user.IndexOneUser(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": err.Error()})
 		log.Print(err)
@@ -29,7 +29,7 @@ func GetOneUserController(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-func AddUserController(c *gin.Context) {
+func CreateUserController(c *gin.Context) {
 	user := new(models.User)
 	err := c.Bind(&user)
 	if err != nil {
@@ -37,5 +37,5 @@ func AddUserController(c *gin.Context) {
 		log.Print(err)
 		return
 	}
-	user.AddUser(user)
+	user.CreateUser(user)
 }
