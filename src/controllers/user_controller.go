@@ -39,3 +39,15 @@ func CreateUserController(c *gin.Context) {
 	}
 	user.CreateUser(user)
 }
+
+func DestroyUserController(c *gin.Context) {
+	user := models.User{}
+	id := c.Param("id")
+	err := user.DestroyUser(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": err.Error()})
+		log.Print(err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{})
+}

@@ -39,7 +39,7 @@ func (u *User) IndexOneUser(id string) (*[]User, error) {
 		return nil, fmt.Errorf("parameter cannot find")
 	}
 	if cap(*user) == 0 {
-		return nil, fmt.Errorf("cannot find id: %s", id)
+		return nil, fmt.Errorf("id: %s is not exist", id)
 	}
 	return user, nil
 }
@@ -48,4 +48,18 @@ func (u *User) CreateUser(user *User) {
 	db := handler.CreateConnection()
 	db.NewRecord(&user)
 	db.Create(&user)
+}
+
+func (u *User) DestroyUser(id string) error {
+	db := handler.CreateConnection()
+	user := &[]User{}
+	if id == "" {
+		return fmt.Errorf("parameter cannot find")
+	}
+	db.Where("id = ?", id).Find(user)
+	if cap(*user) == 0 {
+		return fmt.Errorf("id: %s is not exist", id)
+	}
+	db.Where("id = ?", id).Delete(user)
+	return nil
 }
