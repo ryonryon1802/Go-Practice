@@ -24,18 +24,17 @@ type User struct {
 //	db.AutoMigrate(User{})
 //}
 
-func (u *User) GetUser() *[]User {
+func (u *User) IndexUser() *[]User {
 	db := handler.CreateConnection()
 	user := &[]User{}
 	db.Find(user)
 	return user
 }
 
-func (u *User) GetOneUser(id string) (*[]User, error) {
+func (u *User) IndexOneUser(id string) (*[]User, error) {
 	db := handler.CreateConnection()
 	user := &[]User{}
 	db.Where("id = ?", id).Find(user)
-	fmt.Printf("%v\n", *user)
 	if id == "" {
 		return nil, fmt.Errorf("parameter cannot find")
 	}
@@ -45,7 +44,7 @@ func (u *User) GetOneUser(id string) (*[]User, error) {
 	return user, nil
 }
 
-func (u *User) AddUser(user *User) {
+func (u *User) CreateUser(user *User) {
 	db := handler.CreateConnection()
 	db.NewRecord(&user)
 	db.Create(&user)
