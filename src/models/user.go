@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/ryonryon/Go-Practice/src/interfaces/handler"
 	"time"
@@ -23,11 +24,25 @@ type User struct {
 //	db.AutoMigrate(User{})
 //}
 
-func (u *User) GetUser() *[]User { // *[]Userはポインタ変数？
+func (u *User) GetUser() *[]User {
 	db := handler.CreateConnection()
 	user := &[]User{}
 	db.Find(user)
 	return user
+}
+
+func (u *User) GetOneUser(id string) (*[]User, error) {
+	db := handler.CreateConnection()
+	user := &[]User{}
+	db.Where("id = ?", id).Find(user)
+	fmt.Printf("%v\n", *user)
+	if id == "" {
+		return nil, fmt.Errorf("parameter cannot find")
+	}
+	if cap(*user) == 0 {
+		return nil, fmt.Errorf("cannot find id: %s", id)
+	}
+	return user, nil
 }
 
 func (u *User) AddUser(user *User) {

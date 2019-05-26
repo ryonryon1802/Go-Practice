@@ -17,6 +17,18 @@ func GetUserController(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
+func GetOneUserController(c *gin.Context) {
+	user := models.User{}
+	id := c.Param("id")
+	users, err := user.GetOneUser(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": err.Error()})
+		log.Print(err)
+		return
+	}
+	c.JSON(http.StatusOK, users)
+}
+
 func AddUserController(c *gin.Context) {
 	user := new(models.User)
 	err := c.Bind(&user)
