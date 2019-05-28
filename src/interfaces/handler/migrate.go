@@ -14,11 +14,11 @@ func CreateConnection() *gorm.DB {
     DBNAME   := "test"
     CONNECT  := USER+":"+PASS+"@"+PROTOCOL+"/"+DBNAME+"?parseTime=True&loc=Local"
     
-    DB, err := gorm.Open(DBMS, CONNECT)
+    db, err := gorm.Open(DBMS, CONNECT)
 
     if err != nil {
         panic(err) // panicは、どうしようもないエラーのときに利用 無理やり、プログラムを落とす
     }
     fmt.Printf("[RYON-debug] Connected %s\n", DBMS)
-    return DB
+    return db
 }

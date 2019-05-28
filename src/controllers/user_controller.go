@@ -13,7 +13,12 @@ import (
 
 func IndexUserController(c *gin.Context) {
 	user := models.User{}
-	users := user.IndexUser()
+	users, err := user.IndexUser()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
+		log.Print(err)
+		return
+	}
 	c.JSON(http.StatusOK, users)
 }
 
@@ -22,7 +27,7 @@ func IndexOneUserController(c *gin.Context) {
 	id := c.Param("id")
 	users, err := user.IndexOneUser(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"status": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
 		log.Print(err)
 		return
 	}
@@ -30,14 +35,14 @@ func IndexOneUserController(c *gin.Context) {
 }
 
 func CreateUserController(c *gin.Context) {
-	user := new(models.User)
-	err := c.Bind(&user)
+	user := &models.User{}
+	err := user.CreateUser(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
 		log.Print(err)
 		return
 	}
-	user.CreateUser(user)
+	c.JSON(http.StatusOK, gin.H{})
 }
 
 func UpdateUserController(c *gin.Context) {
@@ -49,6 +54,7 @@ func UpdateUserController(c *gin.Context) {
 		log.Print(err)
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{})
 }
 
 func DestroyUserController(c *gin.Context) {
@@ -56,7 +62,7 @@ func DestroyUserController(c *gin.Context) {
 	id := c.Param("id")
 	err := user.DestroyUser(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"status": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
 		log.Print(err)
 		return
 	}
