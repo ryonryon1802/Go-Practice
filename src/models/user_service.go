@@ -13,7 +13,7 @@ type Model struct {
 	ID        uint `gorm:"primary_key"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	// DeletedAt *time.Time
+	DeletedAt *time.Time
 }
 
 type User struct {
@@ -63,8 +63,8 @@ func (u *User) UpdateUser(c *gin.Context, id string) error {
 	db := handler.CreateConnection()
 	user := new(User)
 	db.Where("id = ?", id).Find(user)
-	if id == "" {
-		return fmt.Errorf("parameter cannot find")
+	if user.ID == 0 {
+		return fmt.Errorf("id: %s is not exist", id)
 	}
 	err := c.Bind(&user)
 	if err != nil {
