@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/ryonryon/Go-Practice/src/interfaces/handler"
 	"time"
@@ -48,6 +49,21 @@ func (u *User) CreateUser(user *User) {
 	db := handler.CreateConnection()
 	db.NewRecord(&user)
 	db.Create(&user)
+}
+
+func (u *User) UpdateUser(c *gin.Context, id string) error {
+	db := handler.CreateConnection()
+	user := new(User)
+	db.Where("id = ?", id).Find(user)
+	if id == "" {
+		return fmt.Errorf("parameter cannot find")
+	}
+	err := c.Bind(&user)
+	if err != nil {
+		return err
+	}
+	db.Save(&user)
+	return nil
 }
 
 func (u *User) DestroyUser(id string) error {

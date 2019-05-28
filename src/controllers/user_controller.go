@@ -40,6 +40,17 @@ func CreateUserController(c *gin.Context) {
 	user.CreateUser(user)
 }
 
+func UpdateUserController(c *gin.Context) {
+	id := c.Param("id")
+	user := models.User{}
+	err := user.UpdateUser(c, id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
+		log.Print(err)
+		return
+	}
+}
+
 func DestroyUserController(c *gin.Context) {
 	user := models.User{}
 	id := c.Param("id")

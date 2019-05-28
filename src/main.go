@@ -17,6 +17,7 @@ func main() {
 	r.GET("/users", controllers.IndexUserController)
 	r.GET("/users/:id", controllers.IndexOneUserController)
 	r.POST("/users/create", controllers.CreateUserController)
+	r.PUT("/users/:id", controllers.UpdateUserController)
 	r.DELETE("/users/:id", controllers.DestroyUserController)
 	r.Run() // デフォルトで:8080になる
 }
