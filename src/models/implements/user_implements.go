@@ -23,8 +23,8 @@ type userImplements struct {
 type IUserImplements interface {
 	SelectAllUser() ([]*db.User, error)
 	SelectSingleUser(ctx *gin.Context) (*db.User, error)
-	CreateUser(c *gin.Context) error
-	UpdateUser(c *gin.Context, id string) error
+	CreateUser(ctx *gin.Context) error
+	UpdateUser(ctx *gin.Context) error
 	DeleteUser(ctx *gin.Context) error
 }
 
@@ -60,9 +60,9 @@ func (impl *userImplements) SelectSingleUser(ctx *gin.Context) (*db.User, error)
 	return user, nil
 }
 
-func (impl *userImplements) CreateUser(c *gin.Context) error {
+func (impl *userImplements) CreateUser(ctx *gin.Context) error {
 	user := new(db.User)
-	err := c.Bind(&user)
+	err := ctx.Bind(&user)
 	if err != nil {
 		return err
 	}
@@ -73,8 +73,12 @@ func (impl *userImplements) CreateUser(c *gin.Context) error {
 	return nil
 }
 
-func (impl *userImplements) UpdateUser(c *gin.Context, id string) error {
+func (impl *userImplements) UpdateUser(ctx *gin.Context) error {
 	user := new(db.User)
+	id := ctx.Param("id")
+	if id == "" {
+		return fmt.Errorf("parameter cannot find")
+	}
 	err := impl.DB.Where("id = ?", id).Find(user).Error
 	if err != nil {
 		return err
@@ -82,7 +86,7 @@ func (impl *userImplements) UpdateUser(c *gin.Context, id string) error {
 	if user.ID == 0 {
 		return fmt.Errorf("id: %s is not exist", id)
 	}
-	err = c.Bind(&user)
+	err = ctx.Bind(&user)
 	if err != nil {
 		return err
 	}

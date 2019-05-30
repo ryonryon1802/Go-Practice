@@ -2,18 +2,37 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ryonryon/Go-Practice/src/models"
+	"github.com/ryonryon/Go-Practice/src/models/implements"
 	"log"
 	"net/http"
 )
 
-// func GetHello(c *gin.Context) {
-// 	c.String(200, "Hello,World!")
-// }
+var (
+	UserController IUserController
+)
 
-func IndexUserController(c *gin.Context) {
-	user := models.User{}
-	users, err := user.IndexUser()
+func init() {
+	UserController = NewUserController(implements.UserImplements)
+}
+
+type userController struct {
+	implements.IUserImplements
+}
+
+type IUserController interface {
+	IndexUserController(c *gin.Context)
+	IndexOneUserController(c *gin.Context)
+	CreateUserController(c *gin.Context)
+	UpdateUserController(c *gin.Context)
+	DestroyUserController(c *gin.Context)
+}
+
+func NewUserController(impl implements.IUserImplements) IUserController {
+	return &userController{impl}
+}
+
+func (ctrl *userController) IndexUserController(c *gin.Context) {
+	users, err := ctrl.IUserImplements.SelectAllUser()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
 		log.Print(err)
@@ -22,10 +41,8 @@ func IndexUserController(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-func IndexOneUserController(c *gin.Context) {
-	user := models.User{}
-	id := c.Param("id")
-	users, err := user.IndexOneUser(id)
+func (ctrl *userController) IndexOneUserController(c *gin.Context) {
+	users, err := ctrl.IUserImplements.SelectSingleUser(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
 		log.Print(err)
@@ -34,9 +51,8 @@ func IndexOneUserController(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-func CreateUserController(c *gin.Context) {
-	user := &models.User{}
-	err := user.CreateUser(c)
+func (ctrl *userController) CreateUserController(c *gin.Context) {
+	err := ctrl.IUserImplements.CreateUser(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
 		log.Print(err)
@@ -45,10 +61,8 @@ func CreateUserController(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
-func UpdateUserController(c *gin.Context) {
-	id := c.Param("id")
-	user := models.User{}
-	err := user.UpdateUser(c, id)
+func (ctrl *userController) UpdateUserController(c *gin.Context) {
+	err := ctrl.IUserImplements.UpdateUser(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
 		log.Print(err)
@@ -57,10 +71,8 @@ func UpdateUserController(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
-func DestroyUserController(c *gin.Context) {
-	user := models.User{}
-	id := c.Param("id")
-	err := user.DestroyUser(id)
+func (ctrl *userController) DestroyUserController(c *gin.Context) {
+	err := ctrl.IUserImplements.DeleteUser(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
 		log.Print(err)

@@ -8,16 +8,24 @@ import (
 	"github.com/ryonryon/Go-Practice/src/models"
 )
 
-func main() {
-	r := gin.Default()
-	db := handler.CreateConnection()
-	db.AutoMigrate(models.User{})
+var (
+	R *gin.Engine
+)
+
+func init() {
+	R = gin.Default()
+	handler.DB.AutoMigrate(models.User{})
 	fmt.Print("[RYON-debug] Migrated\n")
-	// r.GET("/hello", controllers.GetHello) // 関数の頭文字が大文字じゃないと、参照できない
-	r.GET("/users", controllers.IndexUserController)
-	r.GET("/users/:id", controllers.IndexOneUserController)
-	r.POST("/users/create", controllers.CreateUserController)
-	r.PUT("/users/:id", controllers.UpdateUserController)
-	r.DELETE("/users/:id", controllers.DestroyUserController)
-	r.Run() // デフォルトで:8080になる
+	R.GET("/users", controllers.UserController.IndexUserController)
+	R.GET("/users/:id", controllers.UserController.IndexOneUserController)
+	R.POST("/users/create", controllers.UserController.CreateUserController)
+	R.PUT("/users/:id", controllers.UserController.UpdateUserController)
+	R.DELETE("/users/:id", controllers.UserController.DestroyUserController)
+}
+
+func main() {
+	err := R.Run() // デフォルトで:8080になる
+	if err != nil {
+		panic(err)
+	}
 }

@@ -6,6 +6,14 @@ import (
     _ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
+var (
+    DB *gorm.DB
+)
+
+func init() {
+    DB = CreateConnection()
+}
+
 func CreateConnection() *gorm.DB {
     DBMS     := "mysql"
     USER     := "root"
