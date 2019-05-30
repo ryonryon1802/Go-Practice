@@ -21,12 +21,17 @@ type userImplements struct {
 }
 
 type IUserImplements interface {
-
+	SelectAllUser() ([]*db.User, error)
+	SelectSingleUser(ctx *gin.Context) (*db.User, error)
+	CreateUser(c *gin.Context) error
+	UpdateUser(c *gin.Context, id string) error
+	DeleteUser(ctx *gin.Context) error
 }
 
 func NewUserImplements(db *gorm.DB) IUserImplements {
 	return &userImplements{db}
 }
+
 func (impl *userImplements) SelectAllUser() ([]*db.User, error) {
 	var users []*db.User
 	err := impl.DB.Find(users).Error
